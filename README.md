@@ -123,23 +123,22 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     systemctl stop firewalld
 
 #### Disable/Stop NetworkManager
-   systemctl status NetworkManager
-   systemctl disable NetworkManager
-   systemctl stop NetworkManager
+    systemctl status NetworkManager
+    systemctl disable NetworkManager
+    systemctl stop NetworkManager
 
 #systemctl restart NetworkManager
 #### Network Interface UP
-   ifup enp0s3
+    ifup enp0s3
 #### 
-__
+--
 #ifdown enp0s3
 
 #systemctl mask NetworkManager.service
 #systemctl stop NetworkManager.service
 #systemctl disable NetworkManager.service
 #systemctl list-unit-files | grep NetworkManager
-
-__
+--
 ####
     yum autoremove epel-release
 ####
@@ -154,7 +153,6 @@ __
     reboot
     
 #### After Reboot check iptables status
-
     systemctl status iptables
 
 ### Now Working On OpenStack Controller Node
@@ -213,16 +211,15 @@ __
 #### Before run bellow command, '#' will be removed.
 
     packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
-
+--
 #### +++++++++++++++++++++ If Get Error +++++++++++++++++++++
 #### If we get this Error When run avobe command
 
-#### Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
-
-#### Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
+ Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
+ Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
 
 #### Cause: 
-#### Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
+    # Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
 
 #Solution:
 Ref: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
@@ -234,86 +231,86 @@ dnf clean packages
 
 dnf upgrade almalinux-release
 
-++++++++++++++++++++++++++++
+--
 
-##Installation is Completed Check Compute Node 
+#### Installation is Completed Check Compute Node 
 
-rpm -qa | grep -i openstack
+    rpm -qa | grep -i openstack
 
-#Check nova-compute log From Compute Node
+#### Check nova-compute log From Compute Node
 
-tail -f /var/log/nova/nova-compute.log
+    tail -f /var/log/nova/nova-compute.log
+####
+    tail -n 20 /var/log/nova/nova-compute.log
+####
+    yum install -y openstack-utils
+####
+    openstack-service status
+####
+    openstack-service restart
+####
+    openstack-service start
+####
+    openstack-status
+####
+    ovs-vsctl show
+####
+#### Check on Controller Node
 
-tail -n 20 /var/log/nova/nova-compute.log
+    nova hypervisor-list
 
-yum install -y openstack-utils
+#### Add the compute node to the cell database
+#### Important
+#### Run the following commands on the controller node.
 
-openstack-service status
+#### Source the admin credentials to enable admin-only CLI commands 
 
-openstack-service restart
+    . admin-openrc
 
-openstack-service start
+#### Then confirm there are compute hosts in the database
 
-openstack-status
+    openstack compute service list --service nova-compute
 
-ovs-vsctl show
+#### Discover compute hosts:
 
-##Check on Controller Node
+    su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
 
-nova hypervisor-list
+#### Alternatively, you can set an appropriate interval in /etc/nova/nova.conf:
 
-#Add the compute node to the cell database
-#Important
-#Run the following commands on the controller node.
+    vi /etc/nova/nova.conf
+####
+    [scheduler]
+    discover_hosts_in_cells_interval = 300
+####
+    openstack compute service list
+####
+    nova-status upgrade check
+####
+    virsh list --all
+####
+    nova hypervisor-servers compute2
 
-#Source the admin credentials to enable admin-only CLI commands 
 
-. admin-openrc
-
-#Then confirm there are compute hosts in the database
-
-openstack compute service list --service nova-compute
-
-#Discover compute hosts:
-
-su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
-
-#Alternatively, you can set an appropriate interval in /etc/nova/nova.conf:
-
-vi /etc/nova/nova.conf
-
-[scheduler]
-discover_hosts_in_cells_interval = 300
-
-openstack compute service list
-
-nova-status upgrade check
-
-virsh list --all
-
-nova hypervisor-servers compute2
-
-------------------------------------------------------
 systemctl restart openvswitch libvirtd neutron-openvswitch-agent openstack-nova-compute
 ------------------------------------------------------
 
 
-++++++++++++++++++++++++++++++++++++++++++++++
+--
 Ways 2: Add Node
-+++++++++++++++++++++++++++++++++++++++++++++++
+--
+####
+    yum install openstack-nova-compute openstack-neutron openstack-neutron-openvswitch -y
+####
 
-yum install openstack-nova-compute openstack-neutron openstack-neutron-openvswitch -y
+    sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
+####
+    ls -l /etc/sysconfig/iptables*
+####
+    systemctl restart iptables
+####
+    iptables -L
 
-
-sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
-
-ls -l /etc/sysconfig/iptables*
-
-systemctl restart iptables
-
-iptables -L
-
-+++++++++++++++++++++++++++++++++++++++++++++
+--
 Error: OpenStack error: Host is not mapped to any cell
 
 Ref:
@@ -322,7 +319,7 @@ https://cloud.tencent.com/developer/article/1501368
 Solution:
 
 nova-manage cell_v2 discover_hosts --verbose
-++++++++++++++++++++++++++++++++++++++++++++
+--
 3.
 Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance
 
