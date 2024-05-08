@@ -13,11 +13,11 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 
 #### This Configuration do on Compute Node
 
-    #### Verifying the System Informations
+   #### Verifying the System Informations
 
        hostnamectl
 
-   cat /etc/redhat-release
+    cat /etc/redhat-release
 
 grep -E ' svm | vmx' /proc/cpuinfo
 
