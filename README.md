@@ -54,10 +54,10 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 
     dnf install epel-release -y
 
-#### Working On AlmaLinux 9
+#### Install OpenStack-PackStack Package, Here am choose openstack-yoga Version 
 
     dnf install centos-release-openstack-yoga -y
-
+#### YUM Packages Cache Clean
     yum clean all
 
 #### Install network-scripts package
@@ -80,20 +80,20 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
    ip a
 
 #### Edit Network Interface File
-nano /etc/sysconfig/network-scripts/ifcfg-enp1s0
+   nano /etc/sysconfig/network-scripts/ifcfg-enp1s0
 
-#Paste bellow in ifcfg-enp1s0 file
+#### Paste bellow in ifcfg-enp1s0 file
 
-HWADRR=1c:1b:0d:8b:c6:ba
-NM_CONTROLLED=no
-BOOTPROTO=static
-ONBOOT=yes
-IPADDR=192.168.0.150
-PREFIX=24
-GATEWAY=192.168.0.1
-DNS1=8.8.8.8
-DNS2=8.8.4.4
-DEVICE=enp1s0
+   HWADRR=1c:1b:0d:8b:c6:ba
+   NM_CONTROLLED=no
+   BOOTPROTO=static
+   ONBOOT=yes
+   IPADDR=192.168.0.150
+   PREFIX=24
+   GATEWAY=192.168.0.1
+   DNS1=8.8.8.8
+   DNS2=8.8.4.4
+   DEVICE=enp1s0
 
 nmcli connection up enp1s0
 
