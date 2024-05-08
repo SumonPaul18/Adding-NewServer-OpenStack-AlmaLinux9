@@ -32,9 +32,9 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 #### Configure Common Setup
 
     hostnamectl set-hostname cloud
-
+####
     ip a
-
+####
     yum install nano -y
 
 #### Need to Configure Static IP
@@ -90,51 +90,48 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     DNS1=8.8.8.8
     DNS2=8.8.4.4
     DEVICE=enp1s0
-####
+#### Connection UP Network Interface
     nmcli connection up enp1s0
+#### Verifying Network Interface 
+    ip a s enp1s0
+####
+    systemctl restart NetworkManager
+####
+    ping google.com
+####
+    cp /etc/sysconfig/network-scripts/ifcfg-enp1s0 /etc/sysconfig/network-scripts/ifcfg-enp1s0.bak
+####
+    cat /etc/sysconfig/network-scripts/ifcfg-enp1s0
+####
+#### Edit Hosts file:
+#### For OpenStack Controller Node
 
-ip a s enp1s0
+    echo "192.168.0.50 cloud.paulco.xyz cloud" >> /etc/hosts
 
-systemctl restart NetworkManager
+#### For OpenStack Compute Node
 
-ping google.com
+    echo "192.168.0.51 cloud1.paulco.xyz cloud1" >> /etc/hosts
 
-cp /etc/sysconfig/network-scripts/ifcfg-enp1s0 /etc/sysconfig/network-scripts/ifcfg-enp1s0.bak
+#### Checking SELinux
 
-cat /etc/sysconfig/network-scripts/ifcfg-enp1s0
+    getenforce
 
-#Edit Hosts file:
-#For OpenStack Controller Node
+#### Disable SELinux
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+#### Disable Firewalld
+    systemctl disable firewalld
+    systemctl stop firewalld
 
-echo "192.168.0.50 cloud.paulco.xyz cloud" >> /etc/hosts
-
-#For OpenStack Compute Node
-
-echo "192.168.0.51 cloud1.paulco.xyz cloud1" >> /etc/hosts
-
-#Checking SELinux
-
-getenforce
-
-#Disable SELinux
-
-#setenforce 0
-
-sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
-
-# Disable Firewalld
-systemctl disable firewalld
-systemctl stop firewalld
-
-# Disable/Stop NetworkManager
-systemctl status NetworkManager
-systemctl disable NetworkManager
-systemctl stop NetworkManager
+#### Disable/Stop NetworkManager
+   systemctl status NetworkManager
+   systemctl disable NetworkManager
+   systemctl stop NetworkManager
 
 #systemctl restart NetworkManager
-
-ifup enp0s3
-
+#### Network Interface UP
+   ifup enp0s3
+#### 
+__
 #ifdown enp0s3
 
 #systemctl mask NetworkManager.service
@@ -142,108 +139,90 @@ ifup enp0s3
 #systemctl disable NetworkManager.service
 #systemctl list-unit-files | grep NetworkManager
 
-++++++++++++++++++++++++++++++++++++
+__
+####
+    yum autoremove epel-release
+####
+    yum autoremove openstack-packstack
+#### 
+    yum clean all
+####
+    yum repolist
+####
+    yum update -y && yum upgrade -y
+####
+    reboot
+    
+#### After Reboot check iptables status
 
-yum autoremove epel-release
+    systemctl status iptables
 
-yum autoremove openstack-packstack
- 
-yum clean all
+### Now Working On OpenStack Controller Node
+#### Go to OpenStack Controller node
+#### Edit Hosts file:
+#### For OpenStack Controller Node
+    echo "192.168.0.50 cloud.paulco.xyz cloud" >> /etc/hosts
+    
+#### For OpenStack Compute Node
+    echo "192.168.0.51 cloud1.paulco.xyz cloud1" >> /etc/hosts
+####
+#### SSH passwordless connection
 
-yum repolist
+    ssh-keygen
+####
+    cat ~/.ssh/id_rsa.pub
+####
+    ssh-copy-id root@192.168.0.95
+####
+    ssh root@192.168.0.95
 
-yum update -y && yum upgrade -y
+#### From OpenStack Controller Node
+#### 
+    vi /etc/sysconfig/iptables
+####
+    iptables -L
 
-reboot
+#### Allow bellow mentioned Port in iptables roles
 
-
-
-#After Reboot check iptables status
-
-systemctl status iptables
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ Now Working On OpenStack Controller Node              +
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#Go to OpenStack Controller node
-
-+++++++++++++++++++++
-#Edit Hosts file:
-#For OpenStack Controller Node
-
-echo "192.168.0.50 cloud.paulco.xyz cloud" >> /etc/hosts
-
-#For OpenStack Compute Node
-
-echo "192.168.0.51 cloud1.paulco.xyz cloud1" >> /etc/hosts
-
-+++++++++++++++++++++
-#SSH passwordless connection
-
-ssh-keygen
-
-cat ~/.ssh/id_rsa.pub
-
-ssh-copy-id root@192.168.101.231
-
-ssh root@192.168.101.231
-
-+++++++++++++++++++++
-
-#From OpenStack Controller Node
-#vi /etc/sysconfig/iptables
-
-iptables -L
-
-#Allow bellow mentioned Port in iptables roles
-
-iptables -I INPUT -p tcp --dport 5672 -j ACCEPT
-
-iptables -I INPUT -p tcp --dport 15672 -j ACCEPT
-
-iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
-
-iptables -I INPUT -p udp --dport 53 -j ACCEPT
-
-iptables -I INPUT -p udp --dport 67 -j ACCEPT
-
-#iptables -I INPUT -p tcp --dport 3260 -j ACCEPT
+    iptables -I INPUT -p tcp --dport 5672 -j ACCEPT
+    iptables -I INPUT -p tcp --dport 15672 -j ACCEPT
+    iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+    iptables -I INPUT -p udp --dport 53 -j ACCEPT
+    iptables -I INPUT -p udp --dport 67 -j ACCEPT
+    iptables -I INPUT -p tcp --dport 3260 -j ACCEPT
 
 #iptables -A INPUT -p tcp --dport 22 -s 0/0 -j ACCEPT
+####
+    service iptables save
+####
+    systemctl restart iptables
 
-service iptables save
-
-systemctl restart iptables
-
-++++++++++++++++++++++++++++++
-
-### From OpenStack Controller Node
+#### From OpenStack Controller Node
 #### Edit the answer file
 
- cp answers.txt answers.txt.orginal
+    cp answers.txt answers.txt.orginal
+####
+    vi answers.txt
+####
+    EXCLUDE_SERVERS= [Given Existing Nodes IP] 
+####
+    CONFIG_COMPUTE_HOSTS= [Given New Compute Nodes IP]
+####
+    NTP=0.asia.pool.ntp.org,1.asia.pool.ntp.org,2.asia.pool.ntp.org,3.asia.pool.ntp.org
 
-vi answers.txt
+#### Before run bellow command, '#' will be removed.
 
-EXCLUDE_SERVERS= [Given Existing Nodes IP] 
+    packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
 
-CONFIG_COMPUTE_HOSTS= [Given New Compute Nodes IP]
+#### +++++++++++++++++++++ If Get Error +++++++++++++++++++++
+#### If we get this Error When run avobe command
 
-NTP=0.asia.pool.ntp.org,1.asia.pool.ntp.org,2.asia.pool.ntp.org,3.asia.pool.ntp.org
+#### Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
 
-#Before run bellow command, '#' will be removed.
+#### Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
 
-packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
-
-+++++++++++++++++++++ If Get Error +++++++++++++++++++++
-#If we get this Error When run avobe command
-
-#Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
-
-#Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
-
-#Cause: 
-Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
+#### Cause: 
+#### Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
 
 #Solution:
 Ref: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
