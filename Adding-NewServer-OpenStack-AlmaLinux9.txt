@@ -68,10 +68,14 @@ systemctl enable network
 
 systemctl restart network
 
-#Check Network Card Info file
+#### Check Network Card Info file
 
 ls /etc/sysconfig/network-scripts/
 
+#### Remember the IP and MAC Addresses
+ip a
+
+#### Edit Network Interface File
 nano /etc/sysconfig/network-scripts/ifcfg-enp1s0
 
 #Paste bellow in ifcfg-enp1s0 file
