@@ -14,70 +14,70 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 #### This Configuration do on Compute Node
 
    #### Verifying the System Informations
-
-   hostnamectl
-
+#### Verifying Host Name
+    hostnamectl
+#### Verifying OS Version
     cat /etc/redhat-release
+#### Verifying vmx Capable Processor
+    grep -E ' svm | vmx' /proc/cpuinfo
+#### Verifying kmv Enable in Processor
+    lsmod | grep kvm
+#### Verifying Processor Specification
+    lscpu
+#### Verifying RAM Usage
+    free -h
+#### Verifying Storage Partitions 
+    lsblk
 
-grep -E ' svm | vmx' /proc/cpuinfo
+#### Configure Common Setup
 
-lsmod | grep kvm
+    hostnamectl set-hostname cloud
 
-lscpu
+    ip a
 
-free -h
+    yum install nano -y
 
-lsblk
-
-#Configure Common Setup
-
-hostnamectl set-hostname cloud
-
-ip a
-
-yum install nano -y
-
-#Need to Configure Static IP
-
-#Check Network Card Info file
-
-ls /etc/sysconfig/network-scripts/
-
-#Note: If OS are Almalinux 9 may be couldn't find NIC file in network-scripts folder. 
-#This problem for solutions:
-
-#Enable CRB  Repository
-
-dnf config-manager --set-enabled crb
-
-#Install Epel and Epel Next on Almalinux 9
-
-dnf install epel-release -y
-
-#Working On AlmaLinux 9
-
-dnf install centos-release-openstack-yoga -y
-
-yum clean all
-
-# Install network-scripts package
-
-yum install network-scripts -y
-
-# Enable/Start Network Service
-
-systemctl status network
-systemctl start network
-systemctl enable network
-
-systemctl restart network
+#### Need to Configure Static IP
 
 #### Check Network Card Info file
 
-ls /etc/sysconfig/network-scripts/
+    ls /etc/sysconfig/network-scripts/
+
+##### Note: If OS are Almalinux 9 may be couldn't find NIC file in network-scripts folder. 
+##### This problem for solutions:
+
+#### Enable CRB  Repository
+
+    dnf config-manager --set-enabled crb
+
+#### Install Epel and Epel Next on Almalinux 9
+
+    dnf install epel-release -y
+
+#### Working On AlmaLinux 9
+
+    dnf install centos-release-openstack-yoga -y
+
+    yum clean all
+
+#### Install network-scripts package
+
+    yum install network-scripts -y
+
+#### Enable/Start Network Service
+
+   systemctl status network
+   systemctl start network
+   systemctl enable network
+
+   systemctl restart network
+
+#### Check Network Card Info file
+
+   ls /etc/sysconfig/network-scripts/
 
 #### Remember the IP and MAC Addresses
-ip a
+   ip a
 
 #### Edit Network Interface File
 nano /etc/sysconfig/network-scripts/ifcfg-enp1s0
