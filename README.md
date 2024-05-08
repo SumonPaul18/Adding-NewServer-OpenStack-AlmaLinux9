@@ -15,7 +15,7 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 
    #### Verifying the System Informations
 
-       hostnamectl
+   hostnamectl
 
     cat /etc/redhat-release
 
