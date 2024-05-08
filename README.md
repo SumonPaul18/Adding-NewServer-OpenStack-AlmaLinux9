@@ -54,23 +54,19 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 
     dnf install epel-release -y
 
-#### Install OpenStack-PackStack Package, Here am choose openstack-yoga Version 
+#### Install OpenStack-PackStack Package, Here i'm choosing openstack-yoga Version 
 
     dnf install centos-release-openstack-yoga -y
 #### YUM Packages Cache Clean
     yum clean all
-
 #### Install network-scripts package
-
     yum install network-scripts -y
-
 #### Enable/Start Network Service
+    systemctl status network
+    systemctl start network
+    systemctl enable network
 
-   systemctl status network
-   systemctl start network
-   systemctl enable network
-
-   systemctl restart network
+    systemctl restart network
 
 #### Check Network Card Info file
 
