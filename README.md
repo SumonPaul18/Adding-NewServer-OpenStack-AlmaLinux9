@@ -126,19 +126,8 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     systemctl status NetworkManager
     systemctl disable NetworkManager
     systemctl stop NetworkManager
-
-#systemctl restart NetworkManager
 #### Network Interface UP
     ifup enp0s3
-#### 
-
-#ifdown enp0s3
-
-#systemctl mask NetworkManager.service
-#systemctl stop NetworkManager.service
-#systemctl disable NetworkManager.service
-#systemctl list-unit-files | grep NetworkManager
-
 ####
     yum autoremove epel-release
 ####
@@ -188,8 +177,8 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     iptables -I INPUT -p udp --dport 53 -j ACCEPT
     iptables -I INPUT -p udp --dport 67 -j ACCEPT
     iptables -I INPUT -p tcp --dport 3260 -j ACCEPT
+    #iptables -A INPUT -p tcp --dport 22 -s 0/0 -j ACCEPT
 
-#iptables -A INPUT -p tcp --dport 22 -s 0/0 -j ACCEPT
 ####
     service iptables save
 ####
@@ -201,22 +190,21 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     cp answers.txt answers.txt.orginal
 ####
     vi answers.txt
-####
-    EXCLUDE_SERVERS= [Given Existing Nodes IP] 
-####
-    CONFIG_COMPUTE_HOSTS= [Given New Compute Nodes IP]
-####
-    NTP=0.asia.pool.ntp.org,1.asia.pool.ntp.org,2.asia.pool.ntp.org,3.asia.pool.ntp.org
+#### Enter Existing Server IP or Hostname. 
+    EXCLUDE_SERVERS= 192.168.0.50
+#### Enter New Server IP or Hostname
+    CONFIG_COMPUTE_HOSTS= 192.168.0.95
+#### Setup NTP Server, Find NTP Section
+    0.asia.pool.ntp.org,1.asia.pool.ntp.org,2.asia.pool.ntp.org,3.asia.pool.ntp.org
 
 #### Before run bellow command, '#' will be removed.
 
     packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
 
-#### +++++++++++++++++++++ If Get Error +++++++++++++++++++++
+#### +++++++++++++++++++++ If You Get Error +++++++++++++++++++++
 #### If we get this Error When run avobe command
-
-    - Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
-    - Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
+   - Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
+   - Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
 
 #### Cause: 
     #### Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
@@ -230,6 +218,7 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     dnf clean packages
 ####
     dnf upgrade almalinux-release
+#### +++++++++++++++++++++ If You Get Error +++++++++++++++++++++    
 
 #### Installation is Completed Check Compute Node 
 
