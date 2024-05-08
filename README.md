@@ -131,14 +131,14 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 #### Network Interface UP
     ifup enp0s3
 #### 
---
+
 #ifdown enp0s3
 
 #systemctl mask NetworkManager.service
 #systemctl stop NetworkManager.service
 #systemctl disable NetworkManager.service
 #systemctl list-unit-files | grep NetworkManager
---
+
 ####
     yum autoremove epel-release
 ####
@@ -211,27 +211,25 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 #### Before run bellow command, '#' will be removed.
 
     packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
---
+
 #### +++++++++++++++++++++ If Get Error +++++++++++++++++++++
 #### If we get this Error When run avobe command
 
- Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
- Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
+    Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
+    Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
 
 #### Cause: 
-    # Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
+    #### Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
 
-#Solution:
-Ref: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
-#Import the the GPG key in almalinux8
+#### Solution:
+    - Ref: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
+#### Import the the GPG key in almalinux8
 
-rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
-
-dnf clean packages
-
-dnf upgrade almalinux-release
-
---
+    rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+####
+    dnf clean packages
+####
+    dnf upgrade almalinux-release
 
 #### Installation is Completed Check Compute Node 
 
@@ -292,10 +290,8 @@ dnf upgrade almalinux-release
 
 
 systemctl restart openvswitch libvirtd neutron-openvswitch-agent openstack-nova-compute
-------------------------------------------------------
-
-
 --
+
 Ways 2: Add Node
 --
 ####
@@ -309,63 +305,59 @@ Ways 2: Add Node
     systemctl restart iptables
 ####
     iptables -L
+####
+    Error: OpenStack error: Host is not mapped to any cell
+####
+    #Reference:
+    https://cloud.tencent.com/developer/article/1501368
+
+#### Solution:
+
+    nova-manage cell_v2 discover_hosts --verbose
+####    
+- Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance
+
+#### Solution:
+
+     systemctl restart openstack* neutron* libvirtd
+####
+     systemctl status openstack* neutron* libvirtd
+####
+     systemctl restart neutron*
+
+####
+    service openstack-nova-compute restart
+####
+    systemctl restart openstack-nova-compute.service
+
+
+#### Error: When Adding compute Node     
+
+####
+    #Job for neutron-ovs-cleanup.service failed because a fatal signal was delivered causing the control process to dump core.
+
+#### Solution:
+#### Go to Controler Node
+
+    . keysourcerc_admin
+####
+    neutron-linuxbridge-cleanup
+####
+#### OpenStack error: Host is not mapped to any cell
+
+#### Solution:
+#### Go to Controler Node
+
+    . keysourcerc_admin
+####
+    nova-manage cell_v2 discover_hosts --verbose 
+
+#### You can identify this using the openstack compute service list command:
+
+    openstack compute service list --service nova-compute
+
+#### Once that has happened, you can scan and add it to the cell using the nova-manage cell_v2 discover_hosts command:
+
+    nova-manage cell_v2 discover_hosts
 
 --
-Error: OpenStack error: Host is not mapped to any cell
-
-Ref:
-https://cloud.tencent.com/developer/article/1501368
-
-Solution:
-
-nova-manage cell_v2 discover_hosts --verbose
---
-3.
-Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance
-
-Solution:
-
-systemctl restart openstack* neutron* libvirtd
-
-systemctl status openstack* neutron* libvirtd
-
-systemctl restart neutron*
-
-+++++++++++++++++
-
-service openstack-nova-compute restart
-
-systemctl restart openstack-nova-compute.service
-
-+++++++++++++++++++++++++++++++++++++++
-+ Error: When Adding compute Node     +
-+++++++++++++++++++++++++++++++++++++++
-1.
-Job for neutron-ovs-cleanup.service failed because a fatal signal was delivered causing the control process to dump core.
-
-Solution:
-#Go to Controler Node
-
-. keysourcerc_admin
-
-neutron-linuxbridge-cleanup
-
-2.
-OpenStack error: Host is not mapped to any cell
-
-Solution:
-#Go to Controler Node
-
-. keysourcerc_admin
-
-nova-manage cell_v2 discover_hosts --verbose 
-
-#You can identify this using the openstack compute service list command:
-
-openstack compute service list --service nova-compute
-
-#Once that has happened, you can scan and add it to the cell using the nova-manage cell_v2 discover_hosts command:
-
-nova-manage cell_v2 discover_hosts
-
-++++++++++++++++++++++++
