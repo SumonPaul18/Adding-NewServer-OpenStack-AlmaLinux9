@@ -65,33 +65,33 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     systemctl status network
     systemctl start network
     systemctl enable network
-
+####
     systemctl restart network
 
 #### Check Network Card Info file
 
-   ls /etc/sysconfig/network-scripts/
+    ls /etc/sysconfig/network-scripts/
 
 #### Remember the IP and MAC Addresses
-   ip a
+    ip a
 
 #### Edit Network Interface File
-   nano /etc/sysconfig/network-scripts/ifcfg-enp1s0
+    nano /etc/sysconfig/network-scripts/ifcfg-enp1s0
 
 #### Paste bellow in ifcfg-enp1s0 file
 
-   HWADRR=1c:1b:0d:8b:c6:ba
-   NM_CONTROLLED=no
-   BOOTPROTO=static
-   ONBOOT=yes
-   IPADDR=192.168.0.150
-   PREFIX=24
-   GATEWAY=192.168.0.1
-   DNS1=8.8.8.8
-   DNS2=8.8.4.4
-   DEVICE=enp1s0
-
-nmcli connection up enp1s0
+    HWADRR=1c:1b:0d:8b:c6:ba
+    NM_CONTROLLED=no
+    BOOTPROTO=static
+    ONBOOT=yes
+    IPADDR=192.168.0.150
+    PREFIX=24
+    GATEWAY=192.168.0.1
+    DNS1=8.8.8.8
+    DNS2=8.8.4.4
+    DEVICE=enp1s0
+####
+    nmcli connection up enp1s0
 
 ip a s enp1s0
 
