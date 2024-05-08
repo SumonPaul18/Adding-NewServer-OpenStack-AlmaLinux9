@@ -207,9 +207,9 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
    - Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
 
 #### Cause: 
-    #### Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
+  - Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
 
-    - Solution:
+  - Solution:
     - Ref: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
 #### Import the the GPG key in almalinux8
 
