@@ -201,11 +201,11 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
 
 <details>
-<summary> If You Get Error </summary>
+ <summary> If You Get Error </summary>
 
-#### If we get this Error When run avobe command 
-    1. Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
-    2. Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
+#### Types of Error
+    | Error: Pre installing Puppet and discovering hosts' details[ ERROR ] |
+| Error: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux |
 
 #### Cause:
  - Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
