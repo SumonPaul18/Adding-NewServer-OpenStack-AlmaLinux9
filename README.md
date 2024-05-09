@@ -29,9 +29,8 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 #### Verifying Storage Partitions 
     lsblk
 
-#### Configure Common Setup
-
-    hostnamectl set-hostname cloud
+### Now Working On New Computer/Server, Which we want to connect with Existing OpenStack Cloud
+    hostnamectl set-hostname cloud1
 ####
     ip a
 ####
@@ -104,11 +103,11 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     cat /etc/sysconfig/network-scripts/ifcfg-enp1s0
 ####
 #### Edit Hosts file:
-#### For OpenStack Controller Node
+#### For OpenStack All in One Controller Node
 
     echo "192.168.0.50 cloud.paulco.xyz cloud" >> /etc/hosts
 
-#### For OpenStack Compute Node
+#### For OpenStack New Compute Node
 
     echo "192.168.0.51 cloud1.paulco.xyz cloud1" >> /etc/hosts
 
@@ -202,7 +201,7 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     packstack --answer-file #/root/answers.txt | tee adding-Node-log.txt
 
 #### +++++++++++++++++++++ If You Get Error +++++++++++++++++++++
-#### If we get this Error When run avobe command
+> #### If we get this Error When run avobe command
    - Error 1: Pre installing Puppet and discovering hosts' details[ ERROR ].
    - Error 2: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux.
 
