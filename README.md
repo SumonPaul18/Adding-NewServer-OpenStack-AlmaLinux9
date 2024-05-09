@@ -204,23 +204,23 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
  <summary> If You Get Error </summary>
 
 #### Types of Error
-    | Error: Pre installing Puppet and discovering hosts' details[ ERROR ] |
-| Error: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux |
+Error: Pre installing Puppet and discovering hosts' details[ ERROR ] 
+Error: GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-AlmaLinux
 
-#### Cause:
- - Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
+#### Causes
+Almalinux 8 Update & Upgrade related problem. we need to changes AlmaLinux 8 GPG key.
 
 #### Solution:
-   - Reference: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/ 
-  Import the the GPG key in almalinux8 
-
+Reference: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/ 
+#### Import the the GPG key in almalinux8 
     rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux 
-####
+#### Clean Packages
     dnf clean packages
-####
+#### Now, Upgrade Almalinux-Release 
     dnf upgrade almalinux-release
 </details>
-| #### Installation is Completed Check Compute Node |
+
+#### When, Installation is Completed Verifying to the Compute Node
 
     rpm -qa | grep -i openstack
 
