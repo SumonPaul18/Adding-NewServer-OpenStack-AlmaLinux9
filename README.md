@@ -217,9 +217,9 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
     dnf clean packages
 ####
     dnf upgrade almalinux-release
-#### +++++++++++++++++++++ If You Get Error +++++++++++++++++++++    
-
-#### Installation is Completed Check Compute Node 
+| If You Get Error |  
+--------------------
+| #### Installation is Completed Check Compute Node |
 
     rpm -qa | grep -i openstack
 
