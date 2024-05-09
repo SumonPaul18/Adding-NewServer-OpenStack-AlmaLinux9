@@ -225,32 +225,28 @@ Reference: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
     rpm -qa | grep -i openstack
 
 #### Check nova-compute log From Compute Node
-
     tail -f /var/log/nova/nova-compute.log
-####
-    tail -n 20 /var/log/nova/nova-compute.log
-####
+#### Install OpenStack Utilits
     yum install -y openstack-utils
-####
+#### Verifying OpenStack Services
     openstack-service status
-####
-    openstack-service restart
-####
+#### Start OpenStack Services
     openstack-service start
-####
+#### Restart OpenStack Services
+    openstack-service restart
+#### Another Command, Verifying OpenStack Status
     openstack-status
-####
+#### Verifying to Open Virtual Switch
     ovs-vsctl show
-####
-#### Check on Controller Node
-
+#### Verifying on to Controller Node
     nova hypervisor-list
-
+    
 #### Add the compute node to the cell database
 #### Important
+
 #### Run the following commands on the controller node.
 
-#### Source the admin credentials to enable admin-only CLI commands 
+Source the admin credentials to enable admin-only CLI commands 
 
     . admin-openrc
 
@@ -265,43 +261,44 @@ Reference: https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/
 #### Alternatively, you can set an appropriate interval in /etc/nova/nova.conf:
 
     vi /etc/nova/nova.conf
-####
+#### Find **scheduler** Section in /etc/nova/nova.conf file
     [scheduler]
     discover_hosts_in_cells_interval = 300
-####
+#### Verifying to Compute Service List
     openstack compute service list
-####
+#### Verifying to Nova Status
     nova-status upgrade check
-####
+#### Verifying to Running VMs State
     virsh list --all
-####
-    nova hypervisor-servers compute2
-####
-
+#### Setup New Server with New Server Hostname
+    nova hypervisor-servers cloud1
+#### Restart, Some OpenStack Services 
     systemctl restart openvswitch libvirtd neutron-openvswitch-agent openstack-nova-compute
-    
-Ways 2: Add Node
---
-####
-    yum install openstack-nova-compute openstack-neutron openstack-neutron-openvswitch -y
-####
 
-    sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
-####
+<details>
+ <summary> Error: IPtables OR IP Can't Access Related Errror </summary>
+
+ #### Solution:
+ Allow Your IP Block/CIDR in IPtables file
+     sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
+ Verifying IPtables lists
     ls -l /etc/sysconfig/iptables*
-####
+#### Restart IPtables Service
     systemctl restart iptables
-####
+#### Verifying IPtables, Another Approach 
     iptables -L
-####
-    Error: OpenStack error: Host is not mapped to any cell
-####
-    #Reference:
-    https://cloud.tencent.com/developer/article/1501368
+</details>
+
+<details>
+<summary> Error: Host is not mapped to any cell </summary>
+Error: OpenStack error: Host is not mapped to any cell
+- Reference:
+ - https://cloud.tencent.com/developer/article/1501368
 
 #### Solution:
 
     nova-manage cell_v2 discover_hosts --verbose
+</details>
 ####    
 - Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance
 
