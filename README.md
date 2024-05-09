@@ -279,14 +279,15 @@ Source the admin credentials to enable admin-only CLI commands
  <summary> Error: IPtables OR IP Can't Access Related Errror </summary>
 
  #### Solution:
- Allow Your IP Block/CIDR in IPtables file
-     sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
- Verifying IPtables lists
-    ls -l /etc/sysconfig/iptables*
+  Allow Your IP Block/CIDR in IPtables file
+      sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
+  Verifying IPtables lists
+     ls -l /etc/sysconfig/iptables*
 #### Restart IPtables Service
     systemctl restart iptables
 #### Verifying IPtables, Another Approach 
     iptables -L
+
 </details>
 
 <details>
@@ -298,23 +299,23 @@ Error: OpenStack error: Host is not mapped to any cell
 #### Solution:
 
     nova-manage cell_v2 discover_hosts --verbose
+
 </details>
-####    
-- Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance
+
+<details>
+<summary> Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance </summary> 
 
 #### Solution:
-
      systemctl restart openstack* neutron* libvirtd
-####
+#### Verifying Status 
      systemctl status openstack* neutron* libvirtd
-####
+#### Restart Neutron Services
      systemctl restart neutron*
-
-####
+#### Restart Nova-Computer Service
     service openstack-nova-compute restart
-####
+#### Restart Nova-Computer Service, Another Approach
     systemctl restart openstack-nova-compute.service
-
+</details>
 
 #### Error: When Adding compute Node     
 
