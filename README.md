@@ -279,13 +279,17 @@ Source the admin credentials to enable admin-only CLI commands
  <summary> Error: IPtables OR IP Can't Access Related Errror </summary>
 
  #### Solution:
-  Allow Your IP Block/CIDR in IPtables file
-      sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
-  Verifying IPtables lists
+ Allow Your IP Block/CIDR in IPtables file
+ ####
+     sed -i.bak -e 's/\/32/\/16/' /etc/sysconfig/iptables
+ Verifying IPtables lists
+ ####
      ls -l /etc/sysconfig/iptables*
-#### Restart IPtables Service
+Restart IPtables Service
+####
     systemctl restart iptables
-#### Verifying IPtables, Another Approach 
+Verifying IPtables, Another Approach 
+####
     iptables -L
 
 </details>
@@ -293,8 +297,8 @@ Source the admin credentials to enable admin-only CLI commands
 <details>
 <summary> Error: Host is not mapped to any cell </summary>
 Error: OpenStack error: Host is not mapped to any cell
-- Reference:
- - https://cloud.tencent.com/developer/article/1501368
+> Reference:
+  https://cloud.tencent.com/developer/article/1501368
 
 #### Solution:
 
