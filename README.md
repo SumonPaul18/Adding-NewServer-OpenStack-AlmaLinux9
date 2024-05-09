@@ -297,12 +297,23 @@ Verifying IPtables, Another Approach
 <details>
 <summary> Error: Host is not mapped to any cell </summary>
 Error: OpenStack error: Host is not mapped to any cell
-> Reference:
-  https://cloud.tencent.com/developer/article/1501368
+ > Reference:
+ > https://cloud.tencent.com/developer/article/1501368
 
 #### Solution:
-
+Go to Controler Node
+#### 
+    . keysourcerc_admin
+####
     nova-manage cell_v2 discover_hosts --verbose
+    
+We can identify this using the openstack compute service list command:
+#### 
+    openstack compute service list --service nova-compute
+
+Once that has happened, you can scan and add it to the cell using the nova-manage cell_v2 discover_hosts command:
+####
+    nova-manage cell_v2 discover_hosts
 
 </details>
 
@@ -310,44 +321,37 @@ Error: OpenStack error: Host is not mapped to any cell
 <summary> Error: Exceeded maximum number of retries. Exhausted all hosts available for retrying build failures for instance </summary> 
 
 #### Solution:
+Restart Some OpenStack Services
+####
      systemctl restart openstack* neutron* libvirtd
-#### Verifying Status 
+Verifying Status 
+#### 
      systemctl status openstack* neutron* libvirtd
-#### Restart Neutron Services
+Restart Neutron Services
+#### 
      systemctl restart neutron*
-#### Restart Nova-Computer Service
+Restart Nova-Computer Service
+#### 
     service openstack-nova-compute restart
-#### Restart Nova-Computer Service, Another Approach
+Restart Nova-Computer Service, Another Approach
+#### 
     systemctl restart openstack-nova-compute.service
 </details>
 
-#### Error: When Adding compute Node     
+<details>
+<summary> Error: When Adding compute Node </summary> 
 
-####
-    #Job for neutron-ovs-cleanup.service failed because a fatal signal was delivered causing the control process to dump core.
+ #### Error Details:
+ Job for neutron-ovs-cleanup.service failed because a fatal signal was delivered causing the control process to dump core.
 
 #### Solution:
-#### Go to Controler Node
-
+Go to Controler Node
+####
     . keysourcerc_admin
+Cleanup LinuxBridge
 ####
     neutron-linuxbridge-cleanup
-####
-#### OpenStack error: Host is not mapped to any cell
 
-#### Solution:
-#### Go to Controler Node
+</details>
 
-    . keysourcerc_admin
-####
-    nova-manage cell_v2 discover_hosts --verbose 
-
-#### You can identify this using the openstack compute service list command:
-
-    openstack compute service list --service nova-compute
-
-#### Once that has happened, you can scan and add it to the cell using the nova-manage cell_v2 discover_hosts command:
-
-    nova-manage cell_v2 discover_hosts
-
---
+## Thank You 
