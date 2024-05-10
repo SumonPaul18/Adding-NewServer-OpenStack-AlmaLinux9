@@ -16,8 +16,8 @@ Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
    #### Verifying the System Informations
 #### Verifying Host Name
     hostnamectl
-#### Verifying OS Version
-    cat /etc/redhat-release
+<!-- #### Verifying OS Version
+    cat /etc/redhat-release -->
 #### Verifying vmx Capable Processor
     grep -E ' svm | vmx' /proc/cpuinfo
 #### Verifying kmv Enable in Processor
