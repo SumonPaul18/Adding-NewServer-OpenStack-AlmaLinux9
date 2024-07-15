@@ -1,15 +1,8 @@
-# Adding-NewServer-OpenStack-AlmaLinux9
-Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
+# Adding New Compute Node with Existing OpenStack Cloud on AlmaLinux 9
 
-
- 
  ## How to Add a New Compute Node with Existing OpenStack Cloud
  
-
-
-
 ### Pre-Installation for Adding New Compute Node With Existing OpenStack Cloud
-
 
 #### 💻 This Configuration do on Compute Node
 
