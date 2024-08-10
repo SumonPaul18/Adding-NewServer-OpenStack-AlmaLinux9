@@ -11,8 +11,6 @@
     chmod +x adding-almalinux.sh
     . adding-almalinux.sh
 #
-<details>
- <summary> <b> Manually Adding Compute Node </summary> </b>
    #### Verifying the System Informations
 #### Verifying Host Name
     hostnamectl
@@ -151,8 +149,7 @@
     
 #### For OpenStack Compute Node
     echo "192.168.0.51 cloud1.paulco.xyz cloud1" >> /etc/hosts
-####
-</details>
+ ####
 #### SSH passwordless connection
 
     ssh-keygen
