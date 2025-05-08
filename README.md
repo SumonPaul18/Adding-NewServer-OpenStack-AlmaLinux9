@@ -8,8 +8,8 @@
 ####
     git clone https://github.com/SumonPaul18/Adding-NewServer-OpenStack-AlmaLinux9.git
     cd Adding-NewServer-OpenStack-AlmaLinux9
-    chmod +x adding-almalinux.sh
-    . adding-almalinux.sh
+    chmod +x adding-compute-node.sh
+    . adding-compute-node.sh
 #
    #### Verifying the System Informations
 #### Verifying Host Name
