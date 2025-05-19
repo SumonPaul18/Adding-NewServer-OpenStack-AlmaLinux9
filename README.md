@@ -6,8 +6,8 @@
 
 #### 💻 This Configuration do on Compute Node
 ####
-    git clone https://github.com/SumonPaul18/Adding-NewServer-OpenStack-AlmaLinux9.git
-    cd Adding-NewServer-OpenStack-AlmaLinux9
+    git clone https://github.com/SumonPaul18/adding-computenode-openstack.git
+    cd adding-computenode-openstack
     chmod +x adding-compute-node.sh
     . adding-compute-node.sh
 #
